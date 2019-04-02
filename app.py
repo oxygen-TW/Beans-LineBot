@@ -24,7 +24,7 @@ def GetPoem():
     r = requests.get(APIURL)
     jr = json.loads(r.text)
 
-    msg = "<"+jr["title"]+">\n"
+    msg = "<"+jr["title"]+">\n"+jr["author"]+"\n"
     for item in jr["lines"]:
         msg += "\n" + item
 
@@ -51,9 +51,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=GetPoem()))
+    if event.message.text== "抽":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=GetPoem()))
 
 
 import os
