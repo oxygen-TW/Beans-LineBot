@@ -5,7 +5,7 @@ from linebot import (
 )
 from linebot.exceptions import (
     InvalidSignatureError
-)
+
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
@@ -17,6 +17,12 @@ line_bot_api = LineBotApi("/2R2imTjYvW1xPrCW5s3rJo+CssPCX4y6twozzsYXvr/mKZbWMJcA
 # Channel Secret
 handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
 
+def SendImage():
+    message = {
+        "type": "image",
+        "originalContentUrl": "https://home.oxygentw.net/gallery/uploads/medium/eb92c3aa27f8a661962d27135fcf5ce2.JPG"
+        #"previewImageUrl": "縮圖網址"
+        }
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -38,9 +44,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    message = SendImage()
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(message))
 
 
 import os
