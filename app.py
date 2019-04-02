@@ -20,6 +20,11 @@ line_bot_api = LineBotApi("/puoOBTFdlw9CEfPWJvYPPa7z3RMGMFmbQpW9EaYH9kFuGYPQhZzq
 # Channel Secret
 handler = WebhookHandler("41a18b9622ef1904196411a48acda250")
 
+import os
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+    
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -55,8 +60,3 @@ def handle_message(event):
 
     message = TextSendMessage(reply_text)
     line_bot_api.reply_message(event.reply_token, message)
-
-import os
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
