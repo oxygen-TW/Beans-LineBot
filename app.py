@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, requests, json
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -6,7 +6,6 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
@@ -18,12 +17,14 @@ line_bot_api = LineBotApi("/2R2imTjYvW1xPrCW5s3rJo+CssPCX4y6twozzsYXvr/mKZbWMJcA
 # Channel Secret
 handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
 
-def SendImage():
-    message = {
-        "type": "image",
-        "originalContentUrl": "https://home.oxygentw.net/gallery/uploads/medium/eb92c3aa27f8a661962d27135fcf5ce2.JPG"
-        #"previewImageUrl": "縮圖網址"
-        }
+def GetPoem():
+    APIURL = "http://gxy.me/tangshi?format=json"
+    r = requests.get(APIURL)
+    jr = json.loads(r.text)
+
+    msg = "<"+jr["title"]+">\n\n"
+    return msg
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -45,10 +46,9 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = SendImage()
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(message))
+        TextSendMessage(text=GetPoem()))
 
 
 import os
