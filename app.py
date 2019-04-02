@@ -13,9 +13,10 @@ from linebot.models import (
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi("/puoOBTFdlw9CEfPWJvYPPa7z3RMGMFmbQpW9EaYH9kFuGYPQhZzqypsMJ3I2sGzPkkIhAMxXJETTMq7yWMord9UqOxOVJNsPGOFy+/yY9t4JN0qx4Akb/wkAjEYjvZUlRcx2y+Kw27Fw2MtvmitggdB04t89/1O/w1cDnyilFU=")
+line_bot_api = LineBotApi("/2R2imTjYvW1xPrCW5s3rJo+CssPCX4y6twozzsYXvr/mKZbWMJcAx8A1bOozG5o0KZUx0bgWK3cDUfifPUaVJ0DiCtnMcTI6G6PIJA6On1aUwkcgvtbQj2tNflF3kR0oMK/2BcI3ZzI+fpyUG4/wAdB04t89/1O/w1cDnyilFU=
+")
 # Channel Secret
-handler = WebhookHandler("41a18b9622ef1904196411a48acda250")
+handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
 
 
 @app.route("/", methods=['POST'])
