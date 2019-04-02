@@ -24,7 +24,7 @@ def GetPoem():
     r = requests.get(APIURL)
     jr = json.loads(r.text)
 
-    msg = "<"+jr["title"]+">\n"+jr["author"]+"\n"
+    msg = "<"+jr["title"]+">  "+jr["author"]+"\n"
     for item in jr["lines"]:
         msg += "\n" + item
 
