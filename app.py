@@ -1,4 +1,5 @@
-from flask import Flask, request, abort, json
+from flask import Flask, request, abort
+import requests, json
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -19,7 +20,7 @@ handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
 
 def GetPoem():
     APIURL = "http://gxy.me/tangshi?format=json"
-    r = request.get(APIURL)
+    r = requests.get(APIURL)
     jr = json.loads(r.text)
 
     msg = "<"+jr["title"]+">\n\n"
