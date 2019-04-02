@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 import requests, json
+from hanziconv import HanziConv
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -23,11 +24,11 @@ def GetPoem():
     r = requests.get(APIURL)
     jr = json.loads(r.text)
 
-    msg = "<"+jr["title"]+">\n\n"
+    msg = "<"+jr["title"]+">\n"
     for item in jr["lines"]:
-        msg += item+"\n"
+        msg += "\n" + item
 
-    return msg
+    return HanziConv.toTraditional(msg)
 
 
 @app.route("/callback", methods=['POST'])
