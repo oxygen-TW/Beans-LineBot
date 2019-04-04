@@ -82,12 +82,13 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    cmd = event.message.text.split(str=" ")
+    cmd = event.message.text.split(" ")
 
     if cmd[0]== "抽":
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=GetPoem()))
+            TextSendMessage(text=MakePoem()))
+
     if cmd[0] == "天氣":
         station = cmd[1]
 
