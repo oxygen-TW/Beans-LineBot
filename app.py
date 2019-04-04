@@ -63,7 +63,7 @@ def MakeWeather(station):
 
 def MakeRailFall(station):
     result = requests.get("https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=rdec-key-123-45678-011121314")
-    msg = "沒有這個測站啦"
+    msg = "豆芽雨量報告 - " + station + "\n\n"
 
     if(result.status_code != 200):
         return "雨量資料讀取失敗"
@@ -78,8 +78,8 @@ def MakeRailFall(station):
                     msg += "三小時雨量：" + item["weatherElement"][3]["elementValue"] + "mm\n"
                 msg += "日雨量：" + item["weatherElement"][6]["elementValue"] + "mm\n"
                 return msg
-        return msg
-        
+        return "沒有這個測站啦"
+
 def MakePoem():
     APIURL = "http://gxy.me/tangshi?format=json"
     r = requests.get(APIURL)
