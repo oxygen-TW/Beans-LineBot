@@ -38,7 +38,11 @@ def GetWeather(station):
     return target_station
 
 def MakeWeather(station):
-    WeatherData = GetWeather(station)["weatherElement"]
+    WeatherData = GetWeather(station)
+    if WeatherData == "not found":
+        return False
+
+    WeatherData = WeatherData["weatherElement"]
     AQIdata = GetAQI(station)
     msg = "豆芽天氣報告 - " + station
     msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
@@ -91,7 +95,11 @@ def handle_message(event):
 
     if cmd[0] == "天氣":
         station = cmd[1]
+        WeatherMsg = MakeWeather(station)
 
+        if not WeatherMsg:
+            WeatherMsg = "沒這個氣象站啦"
+            
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=MakeWeather(station)))
