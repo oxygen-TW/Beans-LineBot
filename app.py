@@ -99,10 +99,10 @@ def handle_message(event):
 
         if not WeatherMsg:
             WeatherMsg = "沒這個氣象站啦"
-            
+
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=MakeWeather(station)))
+            TextSendMessage(text=WeatherMsg))
 
 
 import os
