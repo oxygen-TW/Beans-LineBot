@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 import requests, json
 
+from functions import MakeRailFall
 from hanziconv import HanziConv
 
 from linebot import (
@@ -110,6 +111,13 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=WeatherMsg))
+    if cmd[0] == "雨量":
+        station = cmd[1]
+        RailFallMsg = MakeRailFall(station)
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=RailFallMsg))
 
 
 import os
