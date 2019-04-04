@@ -19,11 +19,21 @@ line_bot_api = LineBotApi("/2R2imTjYvW1xPrCW5s3rJo+CssPCX4y6twozzsYXvr/mKZbWMJcA
 # Channel Secret
 handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
 
-def GetAQI(station):
+def MakeAQI(station):
     end_point = "http://opendata.epa.gov.tw/webapi/api/rest/datastore/355000000I-000259?filters=SiteName eq '"+ station + "'&sort=SiteName&offset=0&limit=1000"
     
     data = requests.get(end_point)
-    return data.json()["result"]["records"][0]
+    AQImsg = ""
+
+    if data.status_code == 500:
+        return ""
+    else:
+        AQIdata = data.json()["result"]["records"][0]
+        AQImsg += "AQI = " + AQIdata["AQI"] + "\n"
+        AQImsg += "PM2.5 = " + AQIdata["PM2.5"] + " μg/m3\n"
+        AQImsg += "PM10 = " + AQIdata["PM10"] + " μg/m3\n"
+        AQImsg += "空品：" + AQIdata["Status"]
+        return AQImsg
     
 def GetWeather(station):
     end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314"
@@ -43,15 +53,11 @@ def MakeWeather(station):
         return False
 
     WeatherData = WeatherData["weatherElement"]
-    AQIdata = GetAQI(station)
     msg = "豆芽天氣報告 - " + station
     msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
     msg += "濕度 = " + str(float(WeatherData[4]["elementValue"]) * 100) + "% RH\n"
     
-    msg += "AQI = " + AQIdata["AQI"] + "\n"
-    msg += "PM2.5 = " + AQIdata["PM2.5"] + " μg/m3\n"
-    msg += "PM10 = " + AQIdata["PM10"] + " μg/m3\n"
-    msg += "空品：" + AQIdata["Status"] + "\n"
+    msg += MakeAQI(station)
     return msg
 
 def MakePoem():
