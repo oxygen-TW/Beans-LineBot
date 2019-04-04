@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 import requests, json
+
 from hanziconv import HanziConv
 
 from linebot import (
@@ -26,7 +27,7 @@ def MakeAQI(station):
     AQImsg = ""
 
     if data.status_code == 500:
-        return ""
+        return "無 AQI 資料"
     else:
         AQIdata = data.json()["result"]["records"][0]
         AQImsg += "AQI = " + AQIdata["AQI"] + "\n"
