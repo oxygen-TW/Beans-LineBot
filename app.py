@@ -154,7 +154,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=RailFallMsg))
     if cmd[0] == "超級連續長恩":
-        url = request.url_root + "https://stickershop.line-scdn.net/stickershop/v1/sticker/21212/android/sticker.png"
+        url = "https://stickershop.line-scdn.net/stickershop/v1/sticker/21212/android/sticker.png"
         app.logger.info("url=" + url)
         line_bot_api.reply_message(
             event.reply_token,
