@@ -29,7 +29,7 @@ class News():
 
         date = GenerateFormatTime()
 
-        msg = "\n< "+date+"        ^f        ^|^r ^e  ^q^j>\n"
+        msg = "\n< "+date+" 中山醫大校園公告\n"
         #     ^m ^x  ^p  ^|^i ^v   ^h ^a  ^z^dflag
         haveNews = False
 
@@ -40,9 +40,9 @@ class News():
                 news = MessageRegex(item)
                 msg += ("\n" + news[2][1]+"\n")
                 #msg += ("\n ^w  ^|^=  ^z" + news[1])
-                msg += ("\n  ^~ ^h   ^z" + news[0])
-                msg += ("\n ^v   ^m  ^z" + news[3])
-                msg += ("\n    ^}^`  ^z" + baseurl + news[2][0])
+                msg += ("\n類別：" + news[0])
+                msg += ("\n單位：" + news[3])
+                msg += ("\n網址：" + baseurl + news[2][0])
                 msg += "\n\n-------------------------------------\n"
                 #print(msg)
 

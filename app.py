@@ -155,7 +155,11 @@ def handle_message(event):
     if cmd[0] == "豆芽":
         if cmd[1] == "消息":
             news = News()
-            print(news.get())
+            msg = news.get()
+            if(msg != False):
+                line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
 
 
 if __name__ == "__main__":
