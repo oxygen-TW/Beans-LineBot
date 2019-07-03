@@ -3,6 +3,8 @@ from flask import Flask, request, abort
 import requests
 import json
 
+from News import *
+
 from hanziconv import HanziConv
 
 from linebot import (
@@ -150,14 +152,10 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=RailFallMsg))
-    if cmd[0] == "超級連續長恩":
-        for i in range(10):
-            url = "https://stickershop.line-scdn.net/stickershop/v1/sticker/21212/android/sticker.png"
-            app.logger.info("url=" + url)
-            line_bot_api.reply_message(
-                event.reply_token,
-                ImageSendMessage(url, url)
-            )
+    if cmd[0] == "豆芽":
+        if cmd[1] == "消息":
+            news = News()
+            print(news.get())
 
 
 if __name__ == "__main__":
