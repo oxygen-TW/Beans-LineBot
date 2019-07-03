@@ -3,7 +3,7 @@ from flask import Flask, request, abort
 import requests
 import json
 
-from News import *
+from news import *
 
 from hanziconv import HanziConv
 
