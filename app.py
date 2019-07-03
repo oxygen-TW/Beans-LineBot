@@ -3,10 +3,13 @@ from flask import Flask, request, abort
 import requests
 import json
 
-from news import *
+#取得學校最新消息
+from news import * 
 
+#簡轉繁套件
 from hanziconv import HanziConv
 
+#LINE bot 必要套件
 from linebot import (
     LineBotApi, WebhookHandler
 )
