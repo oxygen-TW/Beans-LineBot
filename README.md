@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oxygen-TW/beans-linebot.svg?branch=master)](https://travis-ci.org/oxygen-TW/beans-linebot)
+
 # Line Bot 教學
 
 本教程介紹如何使用 Python LINE Bot SDK 在 Heroku 上架設一個簡單的回話機器人。
