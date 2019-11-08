@@ -1,0 +1,4 @@
+language: python
+os: linux
+script: true
+install: "pip install -r requirements.txt"

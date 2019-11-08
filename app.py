@@ -4,7 +4,7 @@ import requests
 import json
 
 #取得學校最新消息
-from news import * 
+from csmunews import * 
 
 #簡轉繁套件
 from hanziconv import HanziConv
@@ -110,6 +110,8 @@ def MakePoem():
 
     return HanziConv.toTraditional(msg)
 
+def SearchTWNews(topic):
+    return ""
 
 @app.route("/callback", methods=['POST'])
 def callback():
