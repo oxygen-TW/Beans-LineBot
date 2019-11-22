@@ -9,6 +9,9 @@ from csmunews import *
 #簡轉繁套件
 from hanziconv import HanziConv
 
+#油價資訊
+from rocfule import *
+
 #LINE bot 必要套件
 from linebot import (
     LineBotApi, WebhookHandler
@@ -113,6 +116,15 @@ def MakePoem():
 def SearchTWNews(topic):
     return ""
 
+def MakeFulePrice():
+    price = getFuelPrice()
+    msg = "豆芽油價資訊\n\n"
+    msg += "92無鉛汽油："+price["92"]+"\n"
+    msg += "95無鉛汽油："+price["95"]+"\n"
+    msg += "98無鉛汽油："+price["98"]
+
+    return price
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -166,6 +178,11 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=msg))
 
+    if cmd[0] == "油價":
+        msg = MakeFulePrice()
+        line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=msg)) 
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
