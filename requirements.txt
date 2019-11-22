@@ -4,4 +4,3 @@ requests
 hanziconv
 beautifulsoup4
 twnews
-re

@@ -29,7 +29,7 @@ class News():
 
         date = GenerateFormatTime()
 
-        msg = "< "+date+" 中山醫大校園公告 >\n"
+        msg = "< "+date+" 中山醫大校園公告 \n"
         #     ^m ^x  ^p  ^|^i ^v   ^h ^a  ^z^dflag
         haveNews = False
 
