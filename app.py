@@ -119,9 +119,9 @@ def SearchTWNews(topic):
 def MakeFulePrice():
     price = getFuelPrice()
     msg = "豆芽油價資訊\n\n"
-    msg += "92無鉛汽油："+price["92"]+"\n"
-    msg += "95無鉛汽油："+price["95"]+"\n"
-    msg += "98無鉛汽油："+price["98"]
+    msg += "92無鉛汽油："+price["92"]+" 元/公升\n"
+    msg += "95無鉛汽油："+price["95"]+" 元/公升\n"
+    msg += "98無鉛汽油："+price["98"]+" 元/公升"
 
     return msg
 
