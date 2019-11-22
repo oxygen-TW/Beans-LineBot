@@ -123,7 +123,7 @@ def MakeFulePrice():
     msg += "95無鉛汽油："+price["95"]+"\n"
     msg += "98無鉛汽油："+price["98"]
 
-    return price
+    return msg
 
 @app.route("/callback", methods=['POST'])
 def callback():
