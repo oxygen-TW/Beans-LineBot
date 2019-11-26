@@ -35,6 +35,8 @@ from linebot.models import (
 app = Flask(__name__)
 
 conf = Config()
+conf = conf.load()
+
 # Channel Access Token
 line_bot_api = LineBotApi(conf["LineBotApi"])
 # Channel Secret
