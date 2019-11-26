@@ -3,6 +3,9 @@ from flask import Flask, request, abort
 import requests
 import json
 
+#載入config
+from config import *
+
 # 取得學校最新消息
 from csmunews import *
 
@@ -25,14 +28,20 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 
+
+#--------------------------------------------------------------------------
+
+
 app = Flask(__name__)
 
+conf = Config()
 # Channel Access Token
-line_bot_api = LineBotApi(
-    "/2R2imTjYvW1xPrCW5s3rJo+CssPCX4y6twozzsYXvr/mKZbWMJcAx8A1bOozG5o0KZUx0bgWK3cDUfifPUaVJ0DiCtnMcTI6G6PIJA6On1aUwkcgvtbQj2tNflF3kR0oMK/2BcI3ZzI+fpyUG4/wAdB04t89/1O/w1cDnyilFU=")
+line_bot_api = LineBotApi(conf["LineBotApi"])
 # Channel Secret
-handler = WebhookHandler("89e8709f4a8d71d843a2b2fe21d9bc1b")
+handler = WebhookHandler(conf["Webhook"])
 
+
+#------------------------- Functions --------------------------
 
 def MakeAQI(station):
     end_point = "http://opendata.epa.gov.tw/webapi/api/rest/datastore/355000000I-000259?filters=SiteName eq '" + \

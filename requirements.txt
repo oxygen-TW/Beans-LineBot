@@ -3,4 +3,3 @@ flask
 requests
 hanziconv
 beautifulsoup4
-twnews

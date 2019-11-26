@@ -1,4 +1,5 @@
-from bitcoin import *
 
-b = Bitcoin("TWD")
-print(b.price())
+from config import *
+
+c = Config("123","456")
+print(c.load())
