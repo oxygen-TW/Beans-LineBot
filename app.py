@@ -195,6 +195,9 @@ def handle_message(event):
         msg = "豆芽比特幣匯率報告<"+cmd[1].lower()+">\n\n"
         msg += "買入："+price["symbol"]+str(price["buy"])+"\n"
         msg += "賣出："+price["symbol"]+str(price["sell"])
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg))
 
 
 if __name__ == "__main__":
