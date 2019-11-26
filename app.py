@@ -3,16 +3,18 @@ from flask import Flask, request, abort
 import requests
 import json
 
-#取得學校最新消息
-from csmunews import * 
+# 取得學校最新消息
+from csmunews import *
 
-#簡轉繁套件
+# 簡轉繁套件
 from hanziconv import HanziConv
 
-#油價資訊
+# 油價資訊
 from rocfule import *
 
-#LINE bot 必要套件
+from bitcoin import *
+
+# LINE bot 必要套件
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -20,7 +22,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,ImageMessage,ImageSendMessage
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 
 app = Flask(__name__)
@@ -113,8 +115,10 @@ def MakePoem():
 
     return HanziConv.toTraditional(msg)
 
+
 def SearchTWNews(topic):
     return ""
+
 
 def MakeFulePrice():
     price = getFuelPrice()
@@ -124,6 +128,7 @@ def MakeFulePrice():
     msg += "98無鉛汽油："+price["98"]+" 元/公升"
 
     return msg
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -175,14 +180,22 @@ def handle_message(event):
             msg = news.get()
             if(msg != False):
                 line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
+                    event.reply_token,
+                    TextSendMessage(text=msg))
 
     if cmd[0] == "油價":
         msg = MakeFulePrice()
         line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=msg)) 
+            event.reply_token,
+            TextSendMessage(text=msg))
+
+    if cmd[0].lower() == "bitcoin":
+        bc = Bitcoin(cmd[1].upper())
+        price = bc.price()
+        msg = "豆芽比特幣匯率報告<"+cmd[1].lower()+">\n\n"
+        msg += "買入："+price["symbol"]+price["buy"]+"\n"
+        msg += "賣出："+price["symbol"]+price["sell"]
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
