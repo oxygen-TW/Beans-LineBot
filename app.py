@@ -193,8 +193,8 @@ def handle_message(event):
         bc = Bitcoin(cmd[1].upper())
         price = bc.price()
         msg = "豆芽比特幣匯率報告<"+cmd[1].lower()+">\n\n"
-        msg += "買入："+price["symbol"]+price["buy"]+"\n"
-        msg += "賣出："+price["symbol"]+price["sell"]
+        msg += "買入："+price["symbol"]+str(price["buy"])+"\n"
+        msg += "賣出："+price["symbol"]+str(price["sell"])
 
 
 if __name__ == "__main__":
