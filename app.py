@@ -161,6 +161,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    print(event.message.text)
     cmd = event.message.text.split(" ")
 
     if cmd[0] == "抽":
