@@ -12,8 +12,8 @@ def getFuelPrice():
     pricedata = re.findall("無鉛汽油：<span class='font-number'>([0-9+\.]+)<\/span>",data)
     price = {
         "92": pricedata[0],
-        "95":pricedata[1],
-        "98":pricedata[2]
+        "95": pricedata[1],
+        "98": pricedata[2]
     }
 
     return price

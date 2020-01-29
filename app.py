@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, abort
 import requests
 import json
+import logger
 
 #載入config
 from config import *
@@ -15,7 +16,11 @@ from hanziconv import HanziConv
 # 油價資訊
 from rocfule import *
 
+#比特幣匯率
 from bitcoin import *
+
+#黃金價格
+from gold_price import GoldPrice
 
 # LINE bot 必要套件
 from linebot import (
@@ -25,15 +30,16 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, FileMessage
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 
-import tempfile
+
 #--------------------------------------------------------------------------
 
 
 app = Flask(__name__)
 
+#載入組態檔
 conf = Config()
 conf = conf.load()
 
@@ -211,24 +217,38 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=msg))
 
-    @handler.add(MessageEvent, message=FileMessage)
-    def handle_file_message(event):
-        message_content = line_bot_api.get_message_content(event.message.id)
-        with tempfile.NamedTemporaryFile(dir="./tmp", prefix='file-', delete=False) as tf:
-            for chunk in message_content.iter_content():
-                tf.write(chunk)
-            tempfile_path = tf.name
+    if cmd[0] == "黃金":
+        gold = GoldPrice()
+        price = gold.GetPrice()
 
-        dist_path = tempfile_path + '-' + event.message.file_name
-        dist_name = os.path.basename(dist_path)
-        os.rename(tempfile_path, dist_path)
+        msg = "<豆芽黃金價格報告>\n\n"
+        msg += "本行現金買入 : " + price["本行現金買入"] + "\n"
+        msg += "本行現金賣出 : " + price["本行現金賣出"] + "\n"
+        msg += "本行即期買入 : " + price["本行即期買入"] + "\n"
+        msg += "本行即期賣出 : " + price["本行即期賣出"]
 
         line_bot_api.reply_message(
-            event.reply_token, [
-                TextSendMessage(text='Save file.'),
-                TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
-            ])
-    
+            event.reply_token,
+            TextSendMessage(text=msg))
+
+            
+@handler.add(MessageEvent, message=FileMessage)
+def handle_file_message(event):
+    message_content = line_bot_api.get_message_content(event.message.id)
+    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix='file-', delete=False) as tf:
+        for chunk in message_content.iter_content():
+            tf.write(chunk)
+        tempfile_path = tf.name
+
+    dist_path = tempfile_path + '-' + event.message.file_name
+    dist_name = os.path.basename(dist_path)
+    os.rename(tempfile_path, dist_path)
+
+    line_bot_api.reply_message(
+        event.reply_token, [
+            TextSendMessage(text='Save file.'),
+            TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
+        ])
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
