@@ -2,7 +2,6 @@ import os
 from flask import Flask, request, abort
 import requests
 import json
-import logger
 
 #載入config
 from config import *
@@ -231,7 +230,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=msg))
 
-            
+
 @handler.add(MessageEvent, message=FileMessage)
 def handle_file_message(event):
     message_content = line_bot_api.get_message_content(event.message.id)
