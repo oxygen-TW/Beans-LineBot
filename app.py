@@ -230,25 +230,6 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=msg))
 
-
-@handler.add(MessageEvent, message=FileMessage)
-def handle_file_message(event):
-    message_content = line_bot_api.get_message_content(event.message.id)
-    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix='file-', delete=False) as tf:
-        for chunk in message_content.iter_content():
-            tf.write(chunk)
-        tempfile_path = tf.name
-
-    dist_path = tempfile_path + '-' + event.message.file_name
-    dist_name = os.path.basename(dist_path)
-    os.rename(tempfile_path, dist_path)
-
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text='Save file.'),
-            TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
-        ])
-
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
