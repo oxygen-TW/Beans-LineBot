@@ -3,7 +3,7 @@ import requests
 
 class GoldPrice():
 
-    def GetPrice():
+    def GetPrice(self):
         url = "https://rate.bot.com.tw/xrt?Lang=zh-TW"
         html = requests.get(url).text
 
