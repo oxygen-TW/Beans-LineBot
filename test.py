@@ -1,5 +1,5 @@
 
 from config import *
+from rocfule import *
 
-c = Config()
-print(c.load()["LineBotApi"])
+GetPredictPrice()

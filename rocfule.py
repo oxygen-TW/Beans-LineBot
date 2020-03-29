@@ -2,6 +2,7 @@
 
 import re
 import requests
+from bs4 import BeautifulSoup
 
 def getFuelPrice():
     url = "https://www2.moeaboe.gov.tw/oil102/oil2017/newmain.asp"
@@ -17,3 +18,10 @@ def getFuelPrice():
     }
 
     return price
+
+def GetPredictPrice():
+    url = "https://toolbxs.com/zh-TW/detector/gasoline_price"
+    result = requests.get(url)
+    soup = BeautifulSoup(result.content, 'html.parser')
+    tag = soup.find_all("p", class_="prediction down")
+    return tag[0].string

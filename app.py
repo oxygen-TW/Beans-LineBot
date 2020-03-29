@@ -141,7 +141,8 @@ def MakeFulePrice():
     msg = "豆芽油價資訊\n\n"
     msg += "92無鉛汽油："+price["92"]+" 元/公升\n"
     msg += "95無鉛汽油："+price["95"]+" 元/公升\n"
-    msg += "98無鉛汽油："+price["98"]+" 元/公升"
+    msg += "98無鉛汽油："+price["98"]+" 元/公升\n\n"
+    msg += "下周油價預測："+GetPredictPrice()
 
     return msg
 
