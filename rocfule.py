@@ -23,5 +23,5 @@ def GetPredictPrice():
     url = "https://toolbxs.com/zh-TW/detector/gasoline_price"
     result = requests.get(url)
     soup = BeautifulSoup(result.content, 'html.parser')
-    tag = soup.find_all("p", class_="prediction down")
+    tag = soup.find_all("p", class_=["prediction down","up"])
     return tag[0].string
