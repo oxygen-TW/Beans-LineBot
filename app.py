@@ -24,6 +24,9 @@ from gold_price import GoldPrice
 #景氣查詢
 from prosperity_light import *
 
+#測試器
+from tester import Tester
+
 # LINE bot 必要套件
 from linebot import (
     LineBotApi, WebhookHandler
@@ -242,6 +245,14 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=PL.MakeROCProsperityLight()))
+
+    if cmd[0] == "dev-test-cmd-001":
+        tester = Tester()
+        msg = tester.AllTest()
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg))
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -43,4 +43,5 @@ def GetPredictPrice():
     else:
         return "讀取錯誤，請聯絡開發人員"
 
-logging.debug(GetPredictPrice())
+if __name__ == "__main__":
+    logging.debug(GetPredictPrice())
