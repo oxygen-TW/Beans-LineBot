@@ -1,0 +1,9 @@
+class Config():
+    _config = {
+        "LineBotApi":"YOUR Access Token",
+        "Webhook":"YOUR Secret"
+        "port":5000
+    }
+
+    def load(self):
+        return self._config
