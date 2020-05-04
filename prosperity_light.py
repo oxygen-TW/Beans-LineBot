@@ -35,9 +35,9 @@ class ProsperityLight():
 
         msg = "豆芽景氣燈號報告(beta)\n\n"
 
-        msg += '本期景氣燈號({0})\n----{1}燈----\n景氣對策信號綜合分數：{2}\n\n'.format(data[-1][0], data[-1][-1], data[-1][-2])
-        msg += '上期景氣燈號({0})\n----{1}燈----\n景氣對策信號綜合分數：{2}'.format(data[-2][0], data[-2][-1], data[-2][-2])
-        msg += "\n\n綜合分數變化：{0}".format(str(float(data[-2][-2]) - float(data[-1][-2])))
+        msg += '本期景氣燈號({0})\n----{1}燈----\n景氣對策信號綜合分數：{2}\n\n'.format(data[-1][0], str.strip(data[-1][-1]), data[-1][-2])
+        msg += '上期景氣燈號({0})\n----{1}燈----\n景氣對策信號綜合分數：{2}'.format(data[-2][0], str.strip(data[-2][-1]), data[-2][-2])
+        msg += "\n\n綜合分數變化：{0}".format(str(float(data[-1][-2]) - float(data[-2][-2])))
         return msg
 
 if (__name__ == "__main__"):
