@@ -236,6 +236,8 @@ def handle_message(event):
 
     if cmd[0] == "景氣指標":
         PL = ProsperityLight()
+        #下載資料
+        PL.DownloadData(r"https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS82MzkyL2E0NTBiMGM4LTQyMGEtNDMxZi1hODY4LTk1NTE0ZGFjMGI5Mi56aXA%3d&n=5pmv5rCj5oyH5qiZ5Y%2bK54eI6JmfLnppcA%3d%3d&icon=..zip")
 
         line_bot_api.reply_message(
             event.reply_token,
