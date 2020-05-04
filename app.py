@@ -21,6 +21,9 @@ from bitcoin import *
 #黃金價格
 from gold_price import GoldPrice
 
+#景氣查詢
+from prosperity_light import *
+
 # LINE bot 必要套件
 from linebot import (
     LineBotApi, WebhookHandler
@@ -230,6 +233,13 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=msg))
+
+    if cmd[0] == "景氣指標":
+        PL = ProsperityLight()
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=PL.MakeROCProsperityLight()))
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
