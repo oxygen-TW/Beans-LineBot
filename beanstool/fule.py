@@ -42,7 +42,7 @@ class Fule():
         else:
             return "讀取錯誤，請聯絡開發人員"
 
-    def getMsgself(self):
+    def getMsg(self):
         price = self.getFuelPrice()
         msg = "豆芽油價資訊\n\n"
         msg += "92無鉛汽油："+price["92"]+" 元/公升\n"
@@ -51,6 +51,3 @@ class Fule():
         msg += "下周油價預測："+ self.GetPredictPrice()
 
         return msg
-
-if __name__ == "__main__":
-    pass
