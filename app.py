@@ -4,28 +4,20 @@ import requests
 import json
 
 #載入config
-from config import *
+from config import Config
 
-# 取得學校最新消息
-from csmunews import *
+#豆芽工具包
+import beanstool.weather
+import beanstool.rocfule
+import beanstool.prosperity.prosperity_light as bean_prosperity
+import beanstool.bitcoin
+import beanstool.csmunews
+import beanstool.gold_price
+import beanstool.poem
 
-# 簡轉繁套件
-from hanziconv import HanziConv
+#豆芽開發包
+import beansdev.Tester
 
-# 油價資訊
-from rocfule import *
-
-#比特幣匯率
-from bitcoin import *
-
-#黃金價格
-from gold_price import GoldPrice
-
-#景氣查詢
-from prosperity_light import *
-
-#測試器
-from tester import Tester
 
 # LINE bot 必要套件
 from linebot import (
@@ -38,9 +30,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 
-
 #--------------------------------------------------------------------------
-
 
 app = Flask(__name__)
 
@@ -53,106 +43,7 @@ line_bot_api = LineBotApi(conf["LineBotApi"])
 # Channel Secret
 handler = WebhookHandler(conf["Webhook"])
 
-
 #------------------------- Functions --------------------------
-
-def MakeAQI(station):
-    end_point = "http://opendata.epa.gov.tw/webapi/api/rest/datastore/355000000I-000259?filters=SiteName eq '" + \
-        station + "'&sort=SiteName&offset=0&limit=1000"
-
-    data = requests.get(end_point)
-    AQImsg = ""
-
-    if data.status_code == 500:
-        return "無 AQI 資料"
-    else:
-        AQIdata = data.json()["result"]["records"][0]
-        AQImsg += "AQI = " + AQIdata["AQI"] + "\n"
-        AQImsg += "PM2.5 = " + AQIdata["PM2.5"] + " μg/m3\n"
-        AQImsg += "PM10 = " + AQIdata["PM10"] + " μg/m3\n"
-        AQImsg += "空品：" + AQIdata["Status"]
-        return AQImsg
-
-
-def GetWeather(station):
-    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314"
-
-    data = requests.get(end_point).json()
-    data = data["records"]["location"]
-
-    target_station = "not found"
-    for item in data:
-        if item["locationName"] == str(station):
-            target_station = item
-    return target_station
-
-
-def MakeWeather(station):
-    WeatherData = GetWeather(station)
-    if WeatherData == "not found":
-        return False
-
-    WeatherData = WeatherData["weatherElement"]
-    msg = "豆芽天氣報告 - " + station
-    msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
-    msg += "濕度 = " + \
-        str(float(WeatherData[4]["elementValue"]) * 100) + "% RH\n"
-
-    msg += MakeAQI(station)
-    return msg
-
-
-def MakeRailFall(station):
-    result = requests.get(
-        "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=rdec-key-123-45678-011121314")
-    msg = "豆芽降雨報告 - " + station + "\n\n"
-
-    if(result.status_code != 200):
-        return "雨量資料讀取失敗"
-    else:
-        railFallData = result.json()
-        for item in railFallData["records"]["location"]:
-            if station in item["locationName"]:
-                msg += "目前雨量：" + \
-                    item["weatherElement"][7]["elementValue"] + "mm\n"
-                if item["weatherElement"][3]["elementValue"] == "-998.00":
-                    msg += "三小時雨量：0.00mm\n"
-                else:
-                    msg += "三小時雨量：" + \
-                        item["weatherElement"][3]["elementValue"] + "mm\n"
-                msg += "日雨量：" + \
-                    item["weatherElement"][6]["elementValue"] + "mm\n"
-                return msg
-        return "沒有這個測站啦"
-
-
-def MakePoem():
-    APIURL = "http://gxy.me/tangshi?format=json"
-    r = requests.get(APIURL)
-    jr = json.loads(r.text)
-
-    msg = "<"+jr["title"]+">  "+jr["author"]+"\n"
-    for item in jr["lines"]:
-        msg += "\n" + item
-
-    return HanziConv.toTraditional(msg)
-
-
-def SearchTWNews(topic):
-    return ""
-
-
-def MakeFulePrice():
-    price = getFuelPrice()
-    msg = "豆芽油價資訊\n\n"
-    msg += "92無鉛汽油："+price["92"]+" 元/公升\n"
-    msg += "95無鉛汽油："+price["95"]+" 元/公升\n"
-    msg += "98無鉛汽油："+price["98"]+" 元/公升\n\n"
-    msg += "下周油價預測："+GetPredictPrice()
-
-    return msg
-
-
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -176,14 +67,17 @@ def handle_message(event):
     print(event.message.text)
     cmd = event.message.text.split(" ")
 
+    poem = beanstool.poem.Poem()
+
     if cmd[0] == "抽":
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=MakePoem()))
+            TextSendMessage(text=poem.getMsg()))
 
     if cmd[0] == "天氣":
         station = cmd[1]
-        WeatherMsg = MakeWeather(station)
+        weather = beanstool.weather.Weather(station)
+        WeatherMsg = weather.getMsg(station)
 
         if not WeatherMsg:
             WeatherMsg = "沒這個氣象站啦"
@@ -191,13 +85,17 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=WeatherMsg))
+
     if cmd[0] == "雨量":
         station = cmd[1]
-        RailFallMsg = MakeRailFall(station)
+        rain = beanstool.weather.Rainfall(station)
+        RailFallMsg = rain.getMsg(station)
 
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=RailFallMsg))
+
+### 重構階段點
     if cmd[0] == "豆芽":
         if cmd[1] == "消息":
             news = News()
@@ -215,10 +113,7 @@ def handle_message(event):
 
     if cmd[0].lower() == "bitcoin":
         bc = Bitcoin(cmd[1].upper())
-        price = bc.price()
-        msg = "豆芽比特幣匯率報告<"+cmd[1].lower()+">\n\n"
-        msg += "買入："+price["symbol"]+str(price["buy"])+"\n"
-        msg += "賣出："+price["symbol"]+str(price["sell"])
+
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=msg))
@@ -239,16 +134,14 @@ def handle_message(event):
 
     if cmd[0] == "景氣指標":
         PL = ProsperityLight()
-        #下載資料
-        PL.DownloadData(r"https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS82MzkyL2E0NTBiMGM4LTQyMGEtNDMxZi1hODY4LTk1NTE0ZGFjMGI5Mi56aXA%3d&n=5pmv5rCj5oyH5qiZ5Y%2bK54eI6JmfLnppcA%3d%3d&icon=..zip")
 
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=PL.MakeROCProsperityLight()))
 
     if cmd[0] == "dev-test-cmd-001":
-        tester = Tester()
-        msg = tester.AllTest()
+        tester = beansdev.Tester.URLTester()
+        msg = tester.runTest()
 
         line_bot_api.reply_message(
             event.reply_token,

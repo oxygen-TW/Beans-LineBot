@@ -1,6 +1,6 @@
 import requests
 
-class Tester():
+class URLTester():
 
     _TestDict = {
         "weather":"https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=rdec-key-123-45678-011121314",
@@ -11,13 +11,17 @@ class Tester():
         "csmunews":"http://message.csmu.edu.tw/main2List.asp"
     }
 
-    def AllTest(self):
+    def runTest(self):
         report = "Dev URL get test report:\n"
         for name, url in self._TestDict.items():
-            r = requests.get(url)
-            report += "{0} [{1}]\n".format(name, r.status_code)
+            try:
+                r = requests.get(url)
+            except Exception as e:
+                report += "{0} [{1}]\n".format(name, str(e))
+            else:
+                report += "{0} [{1}]\n".format(name, r.status_code)
+             
         return report
 
 if __name__ == "__main__":
-    tester = Tester()
-    print(tester.AllTest())
+    pass

@@ -27,7 +27,7 @@ class ProsperityLight():
 
     def DownloadData(self, _src):
         urllib.request.urlretrieve(_src, "./data.zip")
-        self.unzip("./data.zip", "big5", 1)
+        self.unzip("./data.zip", "big5", 0)
 
     def MakeROCProsperityLight(self):
         with open('景氣指標與燈號.csv', encoding="utf-8") as csvfile:
