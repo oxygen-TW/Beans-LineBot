@@ -14,6 +14,7 @@ import beanstool.bitcoin
 import beanstool.csmunews
 import beanstool.gold_price
 import beanstool.poem
+import beanstool.publicSubscription
 
 #豆芽開發包
 import beansdev.Tester
@@ -138,6 +139,13 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=PL.MakeROCProsperityLight()))
+
+    if cmd[0] == "股票抽籤":
+        ps = PublicSubscription()
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=ps.getMsg()))
 
     if cmd[0] == "dev-test-cmd-001":
         tester = beansdev.Tester.URLTester()

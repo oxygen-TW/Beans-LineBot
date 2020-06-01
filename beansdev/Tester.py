@@ -8,7 +8,8 @@ class URLTester():
         "rocfule":"https://gas.goodlife.tw/",
         "bitcoin":"https://blockchain.info/ticker",
         "prosperity":"https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS82MzkyL2E0NTBiMGM4LTQyMGEtNDMxZi1hODY4LTk1NTE0ZGFjMGI5Mi56aXA%3d&n=5pmv5rCj5oyH5qiZ5Y%2bK54eI6JmfLnppcA%3d%3d&icon=..zip",
-        "csmunews":"http://message.csmu.edu.tw/main2List.asp"
+        "csmunews":"http://message.csmu.edu.tw/main2List.asp",
+        "PublicSubscription":"https://histock.tw/stock/public.aspx"
     }
 
     def runTest(self):
